@@ -10,7 +10,8 @@ import registry from "./_registry.json"
 import { Scene, DirectionalLight, AmbientLight, Color } from "three"
 import { TIMEOUT } from "dns"
 
-export class SaberGenerator{
+export class SaberGenerator
+{
     loader : GLTFLoader
     exporter : GLTFExporter
     registry : SaberRegistry
@@ -38,7 +39,7 @@ export class SaberGenerator{
             console.log(gltf.scene)
         })
         */
-        this.GenerateRandom("saber.glb")
+        this.GenerateRandom("saber.gltf")
 
         console.log("success")
     }
@@ -78,7 +79,17 @@ export class SaberGenerator{
             }
             else
             {
+                /*
                 console.log(this.scene)
+                this.exporter.parse(this.scene, (result:object) =>
+                {
+                    const saveGLTF = (outGL:object, filename:string) => 
+                    {
+                        save(new Blob([JSON.stringify(outGL)], {type: 'application/json'}), filename)
+                    }
+                    saveGLTF(result, outPath)
+                }, {binary:false})
+                */
                 /*
                 this.exporter.parse(this.scene, (result) => {
                     const saveBuffer = (buffer:ArrayBuffer, filename:string) => {
@@ -90,12 +101,11 @@ export class SaberGenerator{
             }
         }
         WaitForLoads()
-        
-
     }
 }
 
-function save(blob:Blob, filename:string) {
+function save(blob:Blob, filename:string) 
+{
     const link = document.createElement('a')
     link.style.display = 'none'
     document.body.appendChild(link)

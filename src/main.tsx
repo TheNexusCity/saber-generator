@@ -7,7 +7,8 @@ import {WebGLRenderer, PerspectiveCamera, DirectionalLight} from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 //const gen = new SaberGenerator()
 
-ReactDOM.render(
+ReactDOM.render
+(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
@@ -39,7 +40,8 @@ if(container != undefined)
   container.append(renderer.domElement)
   const controls = new OrbitControls(camera, renderer.domElement)
 
-  const animate = () => {
+  const animate = () => 
+  {
     controls.update()
     requestAnimationFrame( animate )
     renderer.render(scene, camera)
