@@ -24,14 +24,11 @@ export class SaberRegistry
     grips:Array<SaberPiece>
     guards:Array<SaberPiece>
     pommels:Array<SaberPiece>
-    constructor(pieceRoot:string)
+
+    GetPiecePaths(pieceRoot:string):Array<string>
     {
-        this.guards = new Array()
-        this.grips = new Array()
-        this.pommels = new Array()
-
-        var piecePaths = fs.readdirSync(pieceRoot, {withFileTypes: true})
-
+        var result = new Array<string>()
+        var piecePaths = fs.readdirSync(pieceRoot, {withFileTypes:true})
         while(piecePaths.length > 0)
         {
             var dirElt = piecePaths.pop()
@@ -39,18 +36,26 @@ export class SaberRegistry
             console.log(dirElt)
             if(!/.*\.glb/.test(dirElt.name))
             {
-                var nuPaths = fs.readdirSync(path.join(pieceRoot, dirElt.name), {withFileTypes:true})
-                const nPaths = nuPaths.length
-                for(var i = 0; i < nPaths; i++)
-                {
-                    var nuPath = nuPaths[i]
-                    nuPath.name = path.join(dirElt.name, nuPath.name)
-                    nuPaths[i] = nuPath
-                }
-                nuPaths.forEach((nuPath) => piecePaths.push(nuPath))
-                continue
+                var nuPaths = this.GetPiecePaths(path.join(pieceRoot, dirElt.name))
+                nuPaths.forEach((nuPath) => result.push(nuPath))
             }
-            const piecePath = dirElt.name
+            else
+            {
+                result.push(dirElt.name)
+            }
+        }
+        return result
+    }
+
+    constructor(pieceRoot:string)
+    {
+        this.guards = new Array()
+        this.grips = new Array()
+        this.pommels = new Array()
+
+        var piecePaths = this.GetPiecePaths(pieceRoot)
+        for(var piecePath in piecePaths)
+        {
             if(/.*grip.*/.test(piecePath))
             {
                 this.grips.push(new SaberPiece(piecePath))

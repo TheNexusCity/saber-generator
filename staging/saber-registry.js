@@ -23,24 +23,8 @@ var SaberRegistry = /** @class */ (function () {
         this.guards = new Array();
         this.grips = new Array();
         this.pommels = new Array();
-        var piecePaths = fs.readdirSync(pieceRoot, { withFileTypes: true });
-        while (piecePaths.length > 0) {
-            var dirElt = piecePaths.pop();
-            if (dirElt == undefined)
-                break;
-            console.log(dirElt);
-            if (!/.*\.glb/.test(dirElt.name)) {
-                var nuPaths = fs.readdirSync(path.join(pieceRoot, dirElt.name), { withFileTypes: true });
-                var nPaths = nuPaths.length;
-                for (var i = 0; i < nPaths; i++) {
-                    var nuPath = nuPaths[i];
-                    nuPath.name = path.join(dirElt.name, nuPath.name);
-                    nuPaths[i] = nuPath;
-                }
-                nuPaths.forEach(function (nuPath) { return piecePaths.push(nuPath); });
-                continue;
-            }
-            var piecePath = dirElt.name;
+        var piecePaths = this.GetPiecePaths(pieceRoot);
+        for (var piecePath in piecePaths) {
             if (/.*grip.*/.test(piecePath)) {
                 this.grips.push(new SaberPiece(piecePath));
             }
@@ -53,6 +37,24 @@ var SaberRegistry = /** @class */ (function () {
         }
         fs.writeFileSync("src/_registry.json", JSON.stringify(this));
     }
+    SaberRegistry.prototype.GetPiecePaths = function (pieceRoot) {
+        var result = new Array();
+        var piecePaths = fs.readdirSync(pieceRoot, { withFileTypes: true });
+        while (piecePaths.length > 0) {
+            var dirElt = piecePaths.pop();
+            if (dirElt == undefined)
+                break;
+            console.log(dirElt);
+            if (!/.*\.glb/.test(dirElt.name)) {
+                var nuPaths = this.GetPiecePaths(path.join(pieceRoot, dirElt.name));
+                nuPaths.forEach(function (nuPath) { return result.push(nuPath); });
+            }
+            else {
+                result.push(dirElt.name);
+            }
+        }
+        return result;
+    };
     return SaberRegistry;
 }());
 exports.SaberRegistry = SaberRegistry;
