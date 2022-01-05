@@ -68,7 +68,7 @@ export class SaberGenerator
                     child.name += "_SABERPIECE"
                     this.scene.add(child)
                 })
-                nLoaded += 1
+                nLoaded += 1 //lol this is me stubbornly refusing to use async code
             })
         })
         var WaitForLoads = () => 
