@@ -6,5 +6,5 @@ const pieceRoot = "./pieces/"
 
 var staging = require("./staging/saber-registry")
 
-var registry = new staging.SaberRegistry(pieceRoot)
+staging.RegistryStager.Stage(pieceRoot)
 
