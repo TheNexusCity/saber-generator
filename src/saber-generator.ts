@@ -14,6 +14,7 @@ export class SaberGenerator
 {
     loader : GLTFLoader
     exporter : GLTFExporter
+    downloadLink : HTMLElement | undefined
     registry : SaberRegistry
 
     scene : Scene
@@ -48,6 +49,12 @@ export class SaberGenerator
 
     public async GenerateRandom(outPath:string) 
     {
+        const saveBtn = document.querySelector<HTMLButtonElement>("#save_saber")
+        if(saveBtn != undefined)
+        {
+            saveBtn.disabled = true
+        }
+
         this.scene.children
             .filter((child) => /.*_SABERPIECE/.test(child.name))
             .forEach((child) => this.scene.remove(child))
@@ -101,21 +108,35 @@ export class SaberGenerator
         }
         const loadedList = document.querySelector("#loaded-pieces")
         loadedList?.replaceChildren()
-        paths.forEach(async (thisPath) => {
-            const gltf = await this.loader.loadAsync(thisPath.glbPath)
-            var loadedElt = document.createElement("li")
-            loadedElt.appendChild(new Text(/[_-\w]+\.glb$/.exec(thisPath.glbPath)?.at(0)))
-            document.querySelector<HTMLUListElement>("#loaded-pieces")?.appendChild(
-                loadedElt
+        var loadPromises = new Array<Promise<void>>()
+        paths.forEach((thisPath) => 
+        {
+            const loadPromise = this.loader.loadAsync(thisPath.glbPath)
+            loadPromises.push
+            (
+                loadPromise.then((gltf) => 
+                {
+                    var loadedElt = document.createElement("li")
+                    loadedElt.appendChild(new Text(/[_-\w]+\.glb$/.exec(thisPath.glbPath)?.at(0)))
+                    document.querySelector<HTMLUListElement>("#loaded-pieces")?.appendChild(
+                        loadedElt
+                    )
+                    gltf.scene.children.forEach((child) => 
+                    {
+                        child.name += "_SABERPIECE"
+                        this.scene.add(child)
+                    })
+                })
             )
-            gltf.scene.children.forEach((child) => 
-            {
-                child.name += "_SABERPIECE"
-                this.scene.add(child)
-            })
         })
-
-        console.log("loaded scene(s)")
+        Promise.all(loadPromises).then(() => {
+            console.log("loaded scene(s)")
+            if(saveBtn != undefined)
+            {
+                saveBtn.disabled = false
+            }
+        })
+        
         /*var nLoaded = 0
 
         paths.forEach((thisPath) => {
@@ -160,14 +181,38 @@ export class SaberGenerator
         }
         WaitForLoads()*/
     }
-
-    Save(blob:Blob, filename:string) 
+    public Save()
     {
+        const saveBtn = document.querySelector<HTMLButtonElement>("#save_saber")
+        if(saveBtn != undefined)
+        {
+            saveBtn.disabled = true
+        }
+
+        this.exporter.parse
+        (
+            this.scene, 
+            (gltf) =>
+            {
+                this.SaveBlob(new Blob([gltf as ArrayBuffer], {type: 'application/octet-stream'}), "saber.glb")
+            }, 
+            {binary:true}
+        )
+    }
+    SaveBlob(blob:Blob, filename:string) 
+    {
+        this.downloadLink?.remove()
         const link = document.createElement('a')
+        this.downloadLink = link
         link.style.display = 'none'
         document.body.appendChild(link)
         link.href = URL.createObjectURL(blob);
         link.download = filename;
+        const saveBtn = document.querySelector<HTMLButtonElement>("#save_saber")
+        if(saveBtn != undefined)
+        {
+            saveBtn.disabled = false
+        }
         link.click();
     }
 }

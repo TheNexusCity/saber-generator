@@ -11,6 +11,28 @@
         font-size:medium;
     }
 
+    .save
+    {
+        background-color: rgb(166, 224, 166);
+        border:whitesmoke;
+        border-style:inset;
+        transition-duration: 0.5s;
+    }
+
+    .save :hover
+    {
+        background-color: rgb(69, 148, 69);
+        color:white;
+        border-style:outset;
+    }
+
+    .save :disabled
+    {
+        background-color:gray;
+        color:whitesmoke;
+        border-style:none;
+    }
+
     .switch
     {
         margin:12px;
