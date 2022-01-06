@@ -31,11 +31,18 @@ export class SaberEditor
 
             camera.position.set(0,0,0.5) 
             
-            const button = document.querySelector("#generate_saber")
-            if(button != undefined)
+            const genBtn = document.querySelector("#generate_saber")
+            if(genBtn != undefined)
             {
-                button.addEventListener("click", () => {this.generator.GenerateRandom("saber.gltf")})
+                genBtn.addEventListener("click", () => {this.generator.GenerateRandom("saber.gltf")})
                 console.log("added button")
+            }
+
+            const saveBtn = document.querySelector<HTMLButtonElement>("#save_saber")
+            if(saveBtn != undefined)
+            {
+                
+                saveBtn.addEventListener("click", () => {this.generator.Save()})
             }
 
             renderer.setSize(container.clientWidth, container.clientHeight)
@@ -76,6 +83,11 @@ export default function Editor()
                     <label>Loaded Pieces:</label>
 
                 </ul>
+                <div>
+                    <button id="save_saber" className="save" disabled={true}>
+                        Save
+                    </button>
+                </div>
             </div>
         </React.Fragment>
     )
