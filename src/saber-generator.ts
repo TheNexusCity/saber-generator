@@ -5,10 +5,10 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter"
 
 import { SaberRegistry, SaberPiece } from "../staging/saber-registry"
 
-const root = "./pieces/"
 import registry from "./_registry.json"
 import { Scene, DirectionalLight, AmbientLight, Color } from "three"
 import { TIMEOUT } from "dns"
+import { prototype } from "events"
 
 export class SaberGenerator
 {
@@ -39,12 +39,14 @@ export class SaberGenerator
             console.log(gltf.scene)
         })
         */
-        this.GenerateRandom("saber.gltf")
+        
 
         console.log("success")
     }
 
-    GenerateRandom(outPath:string) 
+
+
+    public async GenerateRandom(outPath:string) 
     {
         this.scene.children
             .filter((child) => /.*_SABERPIECE/.test(child.name))
@@ -52,17 +54,73 @@ export class SaberGenerator
 
         const randIdx = (arr : SaberPiece[]) => Math.floor(Math.random() * arr.length)
         const randItem = (arr : SaberPiece[]) => arr[randIdx(arr)]
-        const gripPath = randItem(registry.grips)
-        const guardPath = randItem(registry.guards)
-        const pommelPath = randItem(registry.pommels)
 
-        var paths = [guardPath, pommelPath, gripPath]
-        var nLoaded = 0
+        const query = (x:string) => document.querySelector<HTMLInputElement>(x)?.checked
+        const useCommon = query("#toggle-common")
+        const useUncommon = query("#toggle-uncommon")
+        const useRare = query("#toggle-rare")
+        const useSpecial = query("#toggle-special")
+
+        const validItem = (piece : SaberPiece) => 
+        {
+            const tier = /(?<=Sabers\/)\w+(?=\/)/.exec(piece.glbPath)?.at(0)
+            /*console.log("for " + piece.glbPath + "\nfound " + tier)
+            console.log("common: " + useCommon)
+            console.log("uncommon: " + useUncommon)
+            console.log("rare: " + useRare)*/
+
+            switch(tier)
+            {
+                case "Common":
+                    return useCommon
+                case "Uncommon":
+                    return useUncommon
+                case "Rare":
+                    return useRare
+                case "Zodiac":
+                    return useSpecial
+                default:
+                    return false
+            }
+        }
+        var paths = []
+        if(useSpecial && 
+            (
+                Math.random() < 0.25 || 
+                ![useCommon, useUncommon, useRare].reduce((x,y) => x || y)
+            ))
+        {
+            paths = [randItem(registry.composites)]
+        }
+        else{
+            const gripPath = randItem(registry.grips.filter(validItem))
+            const guardPath = randItem(registry.guards.filter(validItem))
+            const pommelPath = randItem(registry.pommels.filter(validItem))
+    
+            paths = [guardPath, pommelPath, gripPath]
+        }
+        const loadedList = document.querySelector("#loaded-pieces")
+        loadedList?.replaceChildren()
+        paths.forEach(async (thisPath) => {
+            const gltf = await this.loader.loadAsync(thisPath.glbPath)
+            var loadedElt = document.createElement("li")
+            loadedElt.appendChild(new Text(/[_-\w]+\.glb$/.exec(thisPath.glbPath)?.at(0)))
+            document.querySelector<HTMLUListElement>("#loaded-pieces")?.appendChild(
+                loadedElt
+            )
+            gltf.scene.children.forEach((child) => 
+            {
+                child.name += "_SABERPIECE"
+                this.scene.add(child)
+            })
+        })
+
+        console.log("loaded scene(s)")
+        /*var nLoaded = 0
 
         paths.forEach((thisPath) => {
-            this.loader.load(root + thisPath.glbPath, (gltf) => {
-
-                
+            validItem(thisPath)
+            this.loader.load(thisPath.glbPath, (gltf) => {
                 gltf.scene.children.forEach((child) => 
                 {
                     child.name += "_SABERPIECE"
@@ -75,7 +133,7 @@ export class SaberGenerator
         {
             if(nLoaded < paths.length)
             {
-                setTimeout(WaitForLoads, 500)
+                setTimeout(WaitForLoads, 5000)
             }
             else
             {
@@ -97,19 +155,21 @@ export class SaberGenerator
                     }
                     saveBuffer(result as ArrayBuffer, outPath)
                 }, 
-                {binary:true})*/
+                {binary:true})
             }
         }
-        WaitForLoads()
+        WaitForLoads()*/
+    }
+
+    Save(blob:Blob, filename:string) 
+    {
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
     }
 }
 
-function save(blob:Blob, filename:string) 
-{
-    const link = document.createElement('a')
-    link.style.display = 'none'
-    document.body.appendChild(link)
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-}
+
