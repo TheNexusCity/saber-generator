@@ -48,8 +48,7 @@ export class SaberEditor
             renderer.setSize(container.clientWidth, container.clientHeight)
             renderer.setPixelRatio(window.devicePixelRatio)
             container.append(renderer.domElement)
-            
-            
+        
             
             const controls = new OrbitControls(camera, renderer.domElement)
             const animate = () => 
@@ -79,8 +78,9 @@ export default function Editor()
                     </button>
                 </div>
                 <hr />
+                <label>Loaded Pieces:</label>
                 <ul id="loaded-pieces">
-                    <label>Loaded Pieces:</label>
+                    
 
                 </ul>
                 <div>
