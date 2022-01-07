@@ -1,14 +1,14 @@
-import * as THREE from "three"
-import { GLTFLoader, GLTF } from "three/examples/jsm/loaders/GLTFLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter"
 
-import { SaberRegistry, SaberPiece } from "../staging/saber-registry"
-
+import { SaberRegistry, SaberPiece } from "./staging/saber-registry"
+import { LoadedPiece } from "./editor/loadedPiece"
 import registry from "./_registry.json"
 import { Scene, DirectionalLight, AmbientLight, Color } from "three"
-import { TIMEOUT } from "dns"
-import { prototype } from "events"
+import React from "react"
+import ReactDOM from "react-dom"
+
 
 export class SaberGenerator
 {
@@ -90,7 +90,7 @@ export class SaberGenerator
                     return false
             }
         }
-        var paths = []
+        var paths = new Array<SaberPiece>()
         if(useSpecial && 
             (
                 Math.random() < 0.25 || 
@@ -107,7 +107,11 @@ export class SaberGenerator
             paths = [guardPath, pommelPath, gripPath]
         }
         const loadedList = document.querySelector("#loaded-pieces")
-        loadedList?.replaceChildren()
+        if(loadedList)
+        {
+            ReactDOM.unmountComponentAtNode(loadedList)
+        }
+        
         var loadPromises = new Array<Promise<void>>()
         paths.forEach((thisPath) => 
         {
@@ -116,11 +120,6 @@ export class SaberGenerator
             (
                 loadPromise.then((gltf) => 
                 {
-                    var loadedElt = document.createElement("li")
-                    loadedElt.appendChild(new Text(/[_-\w]+\.glb$/.exec(thisPath.glbPath)?.at(0)))
-                    document.querySelector<HTMLUListElement>("#loaded-pieces")?.appendChild(
-                        loadedElt
-                    )
                     gltf.scene.children.forEach((child) => 
                     {
                         child.name += "_SABERPIECE"
@@ -131,6 +130,12 @@ export class SaberGenerator
         })
         Promise.all(loadPromises).then(() => {
             console.log("loaded scene(s)")
+
+            ReactDOM.render(
+                paths.map((p:SaberPiece) => <LoadedPiece piece={p} />),
+                loadedList
+            )
+
             if(saveBtn != undefined)
             {
                 saveBtn.disabled = false
