@@ -26,3 +26,9 @@ export enum SaberComponent
     "POMMEL",
     "COMPOSITE"
 }
+
+export default class SaberAttributes
+{
+    quality:Quality = Quality.COMMON
+    component:SaberComponent = SaberComponent.COMPOSITE
+}

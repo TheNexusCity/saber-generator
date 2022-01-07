@@ -19,7 +19,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl":".",
+    "paths": {
+      "@editor/*":["src/editor/*"]
+    }
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", ".vscode"],

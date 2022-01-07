@@ -1,9 +1,9 @@
-import registry from "../src/staging/saber-registry.js"
+import staging from "../src/staging/registry-stager.js"
 export default function Main()
 {
     const pieceRoot = "./pieces/"
 
-    registry.Stage(pieceRoot)
+    staging.Stage(pieceRoot)
 
     console.log("Staging successful")
 }
