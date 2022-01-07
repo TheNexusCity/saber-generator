@@ -79,10 +79,10 @@ export default function Editor()
                 </div>
                 <hr />
                 <label>Loaded Pieces:</label>
-                <ul id="loaded-pieces">
+                <div id="loaded-pieces">
                     
 
-                </ul>
+                </div>
                 <div>
                     <button id="save_saber" className="save" disabled={true}>
                         Save

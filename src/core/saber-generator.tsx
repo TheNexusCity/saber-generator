@@ -3,10 +3,9 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter"
 import SaberPiece from "./saber-piece"
 import SaberRegistry from "./saber-registry"
-import LoadedPiece from "../editor/loadedPiece"
+import LoadedPiece from "@editor/loadedPiece"
 import registry from "../_registry.json"
 import { Scene, DirectionalLight, AmbientLight, Color } from "three"
-import React from "react"
 import ReactDOM from "react-dom"
 
 
