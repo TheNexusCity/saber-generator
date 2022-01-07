@@ -20,12 +20,14 @@
     "jsx": "react-jsx",
     "declaration": true,
     "sourceMap": true,
-    "baseUrl":".",
+    "baseUrl":"src",
     "paths": {
-      "@editor/*":["src/editor/*"]
+      "@editor/*":["editor/*"],
+      "@core/*":["core/*"],
+      "@staging/*":["staging/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
   "exclude": ["node_modules", ".vscode"],
   "ts-node":
   {

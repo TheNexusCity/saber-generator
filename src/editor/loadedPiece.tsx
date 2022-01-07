@@ -1,8 +1,9 @@
 
 import React from "react";
-import SaberPiece from "../core/saber-piece";
+import SaberPiece from "@core/saber-piece";
+import { Quality } from "@core/saber-attributes";
 import "./style.scss"
-import { Quality } from "../core/saber-attributes";
+
 
 export interface LoadedPieceProps
 {

@@ -1,8 +1,8 @@
 import fs from "fs"
 import path from "path"
-import { SaberComponent } from "../core/saber-attributes.js"
-import SaberPiece from "../core/saber-piece.js"
-import SaberRegistry from "../core/saber-registry.js"
+import { SaberComponent } from "@core/saber-attributes.js"
+import SaberPiece from "@core/saber-piece.js"
+import SaberRegistry from "@core/saber-registry.js"
 
 export default class RegistryStager
 {

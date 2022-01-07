@@ -1,5 +1,5 @@
 import * as React from "react"
-import SaberGenerator from "../core/saber-generator"
+import SaberGenerator from "@core/saber-generator"
 import "./style.scss"
 import {WebGLRenderer, PerspectiveCamera, DirectionalLight} from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
