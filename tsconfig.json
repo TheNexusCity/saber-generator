@@ -4,7 +4,6 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "allowJs": true,
-    "outDir": "dist",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -19,9 +18,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl":"src",
+    "paths": {
+      "@editor/*":["editor/*"],
+      "@core/*":["core/*"],
+      "@staging/*":["staging/*"]
+    }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
   "exclude": ["node_modules", ".vscode"],
   "ts-node":
   {

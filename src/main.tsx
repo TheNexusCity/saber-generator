@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
-import Editor, { SaberEditor } from './editor/editor'
+import Editor, { SaberEditor } from '@editor/editor'
 //const gen = new SaberGenerator()
 
 ReactDOM.render

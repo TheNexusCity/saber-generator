@@ -1,16 +1,15 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter"
-
-import { SaberRegistry, SaberPiece } from "./staging/saber-registry"
-import { LoadedPiece } from "./editor/loadedPiece"
-import registry from "./_registry.json"
+import SaberPiece from "./saber-piece"
+import SaberRegistry from "./saber-registry"
+import LoadedPiece from "@editor/loadedPiece"
+import registry from "../_registry.json"
 import { Scene, DirectionalLight, AmbientLight, Color } from "three"
-import React from "react"
 import ReactDOM from "react-dom"
 
 
-export class SaberGenerator
+export default class SaberGenerator
 {
     loader : GLTFLoader
     exporter : GLTFExporter
@@ -141,50 +140,6 @@ export class SaberGenerator
                 saveBtn.disabled = false
             }
         })
-        
-        /*var nLoaded = 0
-
-        paths.forEach((thisPath) => {
-            validItem(thisPath)
-            this.loader.load(thisPath.glbPath, (gltf) => {
-                gltf.scene.children.forEach((child) => 
-                {
-                    child.name += "_SABERPIECE"
-                    this.scene.add(child)
-                })
-                nLoaded += 1 //lol this is me stubbornly refusing to use async code
-            })
-        })
-        var WaitForLoads = () => 
-        {
-            if(nLoaded < paths.length)
-            {
-                setTimeout(WaitForLoads, 5000)
-            }
-            else
-            {
-                /*
-                console.log(this.scene)
-                this.exporter.parse(this.scene, (result:object) =>
-                {
-                    const saveGLTF = (outGL:object, filename:string) => 
-                    {
-                        save(new Blob([JSON.stringify(outGL)], {type: 'application/json'}), filename)
-                    }
-                    saveGLTF(result, outPath)
-                }, {binary:false})
-                */
-                /*
-                this.exporter.parse(this.scene, (result) => {
-                    const saveBuffer = (buffer:ArrayBuffer, filename:string) => {
-                        save(new Blob([buffer], {type: 'application/octet-stream'}), filename)
-                    }
-                    saveBuffer(result as ArrayBuffer, outPath)
-                }, 
-                {binary:true})
-            }
-        }
-        WaitForLoads()*/
     }
     public Save()
     {

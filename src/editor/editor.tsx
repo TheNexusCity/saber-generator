@@ -1,5 +1,5 @@
 import * as React from "react"
-import { SaberGenerator } from "../saber-generator"
+import SaberGenerator from "@core/saber-generator"
 import "./style.scss"
 import {WebGLRenderer, PerspectiveCamera, DirectionalLight} from "three"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls"
@@ -79,10 +79,10 @@ export default function Editor()
                 </div>
                 <hr />
                 <label>Loaded Pieces:</label>
-                <ul id="loaded-pieces">
+                <div id="loaded-pieces">
                     
 
-                </ul>
+                </div>
                 <div>
                     <button id="save_saber" className="save" disabled={true}>
                         Save
