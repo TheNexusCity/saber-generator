@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "stage": "node --loader ts-node/esm scripts/stage-saber-assets.js",
+    "generate": "node generate.js",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
